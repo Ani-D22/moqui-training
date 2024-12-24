@@ -4,7 +4,7 @@
         <in-parameters>
         <auto-parameters entity-name="MoquiTraining" include="nonpk"/>
             <parameter name="trainingName" required="true"/>
-            <parameter name="trainingDate" required="true" format="yyyy-MM-dd"/>
+            <parameter name="trainingDate" type="Timestamp" format="yyyy-MM-dd"/>
         </in-parameters>
         <out-parameters>
             <parameter name="trainingId"/>
@@ -15,7 +15,7 @@
         <in-parameters>
             <auto-parameters entity-name="MoquiTraining" include="nonpk"/>
             <parameter name="trainingName" required="true"/>
-            <parameter name="trainingDate" required="true" format="yyyy-MM-dd"/>
+            <parameter name="trainingDate" type="Timestamp" format="yyyy-MM-dd"/>
             <parameter name="trainingPrice"/>
             <parameter name="trainingDuration"/>
         </in-parameters>
@@ -36,5 +36,59 @@
         <out-parameters>
             <parameter name="trainingId"/>
         </out-parameters>
+    </service>
+
+    <service verb="find" noun="TrainingData">
+        <in-parameters>
+            <parameter name="trainingName"/>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="trainingInfo" type="list"/>
+        </out-parameters>
+
+        <actions>
+            <entity-find entity-name="MoquiTraining" list="trainingInfo">
+                <econdition field-name="trainingName"/>
+                <select-field field-name="trainingName,trainingId,trainingDate,trainingPrice,trainingDuration"/>
+            </entity-find>
+        </actions>
+    </service>
+
+    <service verb="store" noun="TrainingUpdate">
+        <description>Create or update MoquiTraining records based on trainingName or trainingId.</description>
+
+        <in-parameters>
+            <parameter name="trainingId" required="true"/>
+            <parameter name="trainingName" required="true"/>
+            <parameter name="trainingDate" type="Timestamp"/>
+            <auto-parameters entity-name="MoquiTraining" include="nonpk"/>
+        </in-parameters>
+
+        <out-parameters>
+            <parameter name="trainingId"/>
+        </out-parameters>
+
+        <actions>
+            <entity-find-one entity-name="MoquiTraining" value-field="existingRecord">
+                <field-map field-name="trainingId" from="trainingId"/>
+            </entity-find-one>
+
+            <if condition="existingRecord">
+                <then>
+                    <set field="existingRecord.trainingDate" from="trainingDate"/>
+
+                    <set field="existingRecord.trainingName" from="trainingName"/>
+                    <set field="existingRecord.trainingPrice" from="trainingPrice"/>
+                    <set field="existingRecord.trainingDuration" from="trainingDuration"/>
+                    <!-- Update the existing record -->
+                    <entity-update value-field="existingRecord"/>
+
+                    <set field="trainingId" from="existingRecord.trainingId"/>
+                </then>
+                <else>
+                    <service-call name="create#MoquiTraining" in-map="context" out-map="context"/>
+                </else>
+            </if>
+        </actions>
     </service>
 </services>
