@@ -1,0 +1,21 @@
+[
+  {"_datatype": "demo"},
+  {
+    "_entity": "entity.MoquiTraining",
+
+    "trainingId": "4",
+    "trainingName": "DSA",
+    "trainingDate": "2024-01-10",
+    "trainingPrice": 499.99,
+    "trainingDuration": 8
+  },
+  {
+    "_entity": "entity.MoquiTraining",
+
+    "trainingId": "5",
+    "trainingName": "Advanced SQL",
+    "trainingDate": "2024-02-15",
+    "trainingPrice": 699.99,
+    "trainingDuration": 10
+  }
+]

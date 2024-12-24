@@ -3,4 +3,5 @@
     <MoquiTraining trainingId="1" trainingName="Java" trainingDate="2024-01-15" trainingPrice="100.00" trainingDuration="10" />
     <MoquiTraining trainingId="2" trainingName="Python" trainingDate="2024-01-20" trainingPrice="200.00" trainingDuration="20" />
     <MoquiTraining trainingId="3" trainingName="Javascript" trainingDate="2024-01-28" trainingPrice="150.00" trainingDuration="30" />
+    <MoquiTraining trainingId="8" trainingName="Javascript" trainingDate="2024-01-28" trainingPrice="150.00" trainingDuration="30" />
 </entity-facade-xml>
