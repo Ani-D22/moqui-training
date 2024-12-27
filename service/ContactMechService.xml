@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/service-definition-3.xsd">-->
+
+<!--    <service verb="create" noun="ContactMech" type="entity-auto">-->
+<!--        <in-parameters>-->
+<!--            <auto-parameters entity-name="ContactMech" include="nonpk"/>-->
+<!--            <parameter name="contactMechId" required="true"/>-->
+<!--            <parameter name="partyId" required="true"/>-->
+<!--            <parameter name="streetAddress" required="true"/>-->
+<!--            &lt;!&ndash;            <parameter name="trainingDate" type="Timestamp" format="yyyy-MM-dd"/>&ndash;&gt;-->
+<!--        </in-parameters>-->
+<!--        <out-parameters>-->
+<!--            <parameter name="contactMechId"/>-->
+<!--        </out-parameters>-->
+<!--    </service>-->
+
+<!--    <service verb="store" noun="ContactMechUpdate">-->
+<!--        <in-parameters>-->
+<!--            <auto-parameters entity-name="ContactMech" include="all"/>-->
+<!--            <parameter name="contactMechId" required="true"/>-->
+<!--            <parameter name="partyId" required="true"/>-->
+<!--            <parameter name="streetAddress" required="true"/>-->
+<!--            <auto-parameters entity-name="ContactMech" include="nonpk"/>-->
+<!--        </in-parameters>-->
+
+<!--        <out-parameters>-->
+<!--            <parameter name="contactMechId"/>-->
+<!--        </out-parameters>-->
+
+<!--        <actions>-->
+<!--            <entity-find-one entity-name="ContactMech" value-field="existingRecord">-->
+<!--                <field-map field-name="contactMechId" from="contactMechId"/>-->
+<!--            </entity-find-one>-->
+
+<!--            <if condition="existingRecord">-->
+<!--                <then>-->
+<!--                    <set field="existingRecord.streetAddress" from="streetAddress"/>-->
+<!--                    <set field="existingRecord.city" from="city"/>-->
+<!--                    <set field="existingRecord.state" from="state"/>-->
+<!--                    <set field="existingRecord.postalCode" from="postalCode"/>-->
+<!--                    &lt;!&ndash; Update the existing record &ndash;&gt;-->
+<!--                    <entity-update value-field="existingRecord"/>-->
+
+<!--                    <set field="contactMechId" from="existingRecord.contactMechId"/>-->
+<!--                    <set field="success" from="true"/>-->
+<!--                    <set field="message" from="Contact Mech updated."/>-->
+<!--                </then>-->
+<!--                <else>-->
+<!--                    <set field="success" from="false"/>-->
+<!--                    <set field="message" from="Contact Mech update failed."/>-->
+<!--                </else>-->
+<!--            </if>-->
+<!--        </actions>-->
+<!--    </service>-->
+<!--</services>-->

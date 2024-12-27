@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/service-definition-3.xsd">
+
+    <service verb="create" noun="Party" type="entity-auto">
+        <in-parameters>
+            <auto-parameters entity-name="Party" include="nonpk"/>
+            <parameter name="partyType" required="true"/>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="partyId"/>
+        </out-parameters>
+    </service>
+
+    <service verb="store" noun="Party">
+        <in-parameters>
+            <auto-parameters entity-name="Party" include="all"/>
+            <parameter name="partyId" required="true"/>
+            <auto-parameters entity-name="Party" include="nonpk"/>
+        </in-parameters>
+
+        <out-parameters>
+            <parameter name="partyId"/>
+        </out-parameters>
+
+        <actions>
+            <entity-find-one entity-name="Party" value-field="existingRecord">
+                <field-map field-name="partyId" from="partyId"/>
+            </entity-find-one>
+
+            <if condition="existingRecord">
+                <then>
+                    <set field="existingRecord.partyType" from="partyType"/>
+                    <set field="existingRecord.firstName" from="firstName"/>
+                    <set field="existingRecord.lastName" from="lastName"/>
+                    <!-- Updates my existing record -->
+                    <entity-update value-field="existingRecord"/>
+
+                    <set field="partyId" from="existingRecord.partyId"/>
+
+                    <set field="success" from="true"/>
+                    <set field="message" from="Record updated."/>
+                </then>
+                <else>
+                    <service-call name="create#Party" in-map="context" out-map="context"/>
+                    <set field="success" from="false"/>
+                    <set field="message" from="New record inserted."/>
+                </else>
+            </if>
+        </actions>
+    </service>
+</services>

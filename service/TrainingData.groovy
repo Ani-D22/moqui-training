@@ -1,4 +1,4 @@
-def training = ec.entity.makeValue("MoquiTraining")
-training.setFields(context, true, null, null)
-training.setSequencedIdPrimary()
-training.create()
+def train = ec.entity.makeValue("MoquiTraining")
+train.setFields(context, true, null, null)
+train.setSequencedIdPrimary()
+train.create()

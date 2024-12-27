@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- General Guideline Verbs: GET=find, POST=create/do, PUT=store (create or update), PATCH=update, DELETE=delete  -->
+
+<resource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/rest-api-3.xsd"
+          name="api" displayName="PARTY REST API" version="1.0.0">
+
+    <!-- Parent Resource for Party -->
+    <resource name="parties" require-authentication="anonymous-all">
+        <method type="get"><entity name="Party" operation="list"/></method>
+        <method type="post"><service name="PartyService.create#Party"/></method>
+
+        <id name="partyId">
+            <method type="get"><entity name="Party" operation="one"/></method>
+            <method type="delete"><entity name="Party" operation="delete"/></method>
+            <method type="put"><service name="PartyService.store#Party"/></method>
+
+            <!-- Parent Resource for Contact Mech -->
+            <resource name="contacts">
+                <method type="post"><entity name="ContactMech" operation="create"/></method>
+                <method type="get"><entity name="ContactMech" operation="list"/></method>
+
+                <id name="contactMechId">
+                    <method type="patch"><entity name="ContactMech" operation="update"/> </method>
+                    <method type="delete"><entity name="ContactMech" operation="delete"/></method>
+                </id>
+            </resource>
+        </id>
+    </resource>
+
+    <!-- Parent Resource for Product -->
+    <resource name="products" require-authentication="anonymous-all">
+        <method type="get"><entity name="Product" operation="list"/></method>
+        <method type="post"><entity name="Product" operation="create"/></method>
+        <id name="productId">
+            <method type="patch"><entity name="Product" operation="update"/></method>
+            <method type="delete"><entity name="Product" operation="delete"/></method>
+        </id>
+    </resource>
+
+    <!-- Parent Resource for ORDER -->
+    <resource name="orders" require-authentication="anonymous-all">
+        <method type="get"><entity name="OrderHeader" operation="list"/></method>
+        <method type="post"><entity name="OrderHeader" operation="create"/></method>
+        <id name="orderId">
+            <method type="get"><entity name="OrderHeader" operation="one"/></method>
+            <method type="delete"><entity name="OrderHeader" operation="delete"/></method>
+            <method type="put"><entity name="OrderHeader" operation="update"/></method>
+
+            <resource name="items">
+                <method type="post"><entity name="OrderItem" operation="create"/></method>
+            </resource>
+        </id>
+    </resource>
+</resource>
