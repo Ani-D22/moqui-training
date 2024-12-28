@@ -26,43 +26,21 @@
     </service>
 
     <service verb="find" noun="OrderHeader">
+
         <in-parameters>
-            <parameter name="orderId"/>
+            <parameter name="orderId" required="true"/>
         </in-parameters>
+
         <out-parameters>
-            <parameter name="header" type="list">
-                <parameter name="groupedOrderItems" type="list"/>
-            </parameter>
+            <parameter name="header"/>
+            <parameter name="itemList" type="List"/>
         </out-parameters>
 
         <actions>
-            <!-- Find OrderHeader records based on orderId -->
-            <entity-find entity-name="OrderHeader" list="header">
-                <econdition field-name="orderId" from="orderId"/>
-                <select-field field-name="partyId"/>
-                <select-field field-name="orderDate"/>
-                <select-field field-name="shippingContactMechId"/>
-                <select-field field-name="billingContactMechId"/>
+            <entity-find-one entity-name="OrderHeader" value-field="header"/>
+            <entity-find entity-name="OrderItem" list="itemList">
+                <econdition field-name="orderId" from="context.orderId"/>
             </entity-find>
-
-            <!-- Find all OrderItems -->
-            <entity-find entity-name="OrderItem" list="orderItems">
-                <econdition field-name="orderId" from="orderId"/>
-                <order-by field-name="orderId"/>
-            </entity-find>
-
-            <!-- Initialize groupedOrderItems -->
-            <set field="groupedOrderItems" value="[]"/>
-
-            <!-- Group OrderItems by orderId -->
-            <iterate list="orderItems" entry="orderItem">
-                <find-list list="groupedOrderItems" filter="[orderId: ${orderItem.orderId}]" result-var="currentGroup"/>
-                <if-empty list="currentGroup">
-                    <set field="currentGroup" value="{orderId: ${orderItem.orderId}, items: []}"/>
-                    <add-to list="groupedOrderItems" value="currentGroup"/>
-                </if-empty>
-                <add-to list="currentGroup.items" value="orderItem"/>
-            </iterate>
         </actions>
     </service>
 
@@ -83,12 +61,8 @@
                 <econdition field-name="orderId" value="${context.orderId}"/>
             </entity-delete-by-condition>
             <if condition="orderId">
-                <then>
-                    <set field="status" value="true"/>
-                </then>
-                <else>
-                    <set field="status" value="true"/>
-                </else>
+                <then><set field="status" value="true"/></then>
+                <else><set field="status" value="false"/></else>
             </if>
         </actions>
     </service>

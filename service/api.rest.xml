@@ -41,8 +41,8 @@
         <method type="get"><entity name="OrderHeader" operation="list"/></method>
         <method type="post"><service name="OrderHeaderService.create#OrderHeader"/></method>
         <id name="orderId">
-            <method type="get"><entity name="OrderHeader" masterName="" operation="one"/></method>
-            <method type="delete"><entity name="OrderHeader" operation="delete"/></method>
+            <method type="get"><service name="OrderHeaderService.find#OrderHeader"/></method>
+            <method type="delete"><entity name="OrderHeaderService.delete#OrderHeader" operation="delete"/></method>
             <method type="put"><entity name="OrderHeader" operation="update"/></method>
 
             <resource name="items">
