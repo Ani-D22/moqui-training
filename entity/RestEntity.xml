@@ -39,8 +39,9 @@
 <!--     Order_Header Entity -->
     <entity entity-name="OrderHeader" package="entity">
         <field name="orderId" type="id" is-pk="true" />
-        <field name="orderDate" type="date" not-null="true" />
         <field name="partyId" type="id" />
+
+        <field name="orderDate" type="date"/>
         <field name="shippingContactMechId" type="id" />
         <field name="billingContactMechId" type="id" />
 
@@ -61,10 +62,10 @@
         <field name="orderId" type="id"/>
         <field name="productId" type="id"/>
 
-        <field name="quantity" type="number-integer" not-null="true"/>
+        <field name="quantity" type="number-integer"/>
         <field name="status" type="text-medium"/>
 
-        <relationship type="one" title="Order" related="Order">
+        <relationship type="one" title="OrderHeader" related="OrderHeader">
             <key-map field-name="orderId"/>
         </relationship>
         <relationship type="one" title="Product" related="Product">

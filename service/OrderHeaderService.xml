@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/service-definition-3.xsd">
+
+    <service verb="create" noun="OrderHeader">
+        <in-parameters>
+            <auto-parameters entity-name="OrderHeader" include="nonpk" required="true"/>
+            <parameter name="listOfItems" type="List" required="true">
+                <parameter name="orderItem" type="Map" required="true">
+                    <parameter name="productId" required="true"/>
+                    <parameter name="quantity" required="true"/>
+                    <parameter name="status"/>
+                </parameter>
+            </parameter>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="orderId"/>
+        </out-parameters>
+        <actions>
+            <service-call name="create#OrderHeader" in-map="context" out-map="context"/>
+            <iterate list="listOfItems" entry="orderItem">
+                <set field="orderItem.orderId" from="orderItem.orderId"/>
+                <service-call name="OrderItemService.create#OrderItem" in-map="orderItem"/>
+            </iterate>
+        </actions>
+    </service>
+
+    <service verb="find" noun="OrderHeader">
+        <in-parameters>
+            <parameter name="orderId"/>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="header" type="list">
+                <parameter name="groupedOrderItems" type="list"/>
+            </parameter>
+        </out-parameters>
+
+        <actions>
+            <!-- Find OrderHeader records based on orderId -->
+            <entity-find entity-name="OrderHeader" list="header">
+                <econdition field-name="orderId" from="orderId"/>
+                <select-field field-name="partyId"/>
+                <select-field field-name="orderDate"/>
+                <select-field field-name="shippingContactMechId"/>
+                <select-field field-name="billingContactMechId"/>
+            </entity-find>
+
+            <!-- Find all OrderItems -->
+            <entity-find entity-name="OrderItem" list="orderItems">
+                <econdition field-name="orderId" from="orderId"/>
+                <order-by field-name="orderId"/>
+            </entity-find>
+
+            <!-- Initialize groupedOrderItems -->
+            <set field="groupedOrderItems" value="[]"/>
+
+            <!-- Group OrderItems by orderId -->
+            <iterate list="orderItems" entry="orderItem">
+                <find-list list="groupedOrderItems" filter="[orderId: ${orderItem.orderId}]" result-var="currentGroup"/>
+                <if-empty list="currentGroup">
+                    <set field="currentGroup" value="{orderId: ${orderItem.orderId}, items: []}"/>
+                    <add-to list="groupedOrderItems" value="currentGroup"/>
+                </if-empty>
+                <add-to list="currentGroup.items" value="orderItem"/>
+            </iterate>
+        </actions>
+    </service>
+
+
+    <service verb="delete" noun="OrderHeader">
+        <in-parameters>
+            <parameter name="orderId" required="true"/>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="status"/>
+        </out-parameters>
+        <actions>
+            <entity-delete-by-condition entity-name="OrderItem">
+                <econdition field-name="orderId" value="${context.orderId}"/>
+            </entity-delete-by-condition>
+
+            <entity-delete-by-condition entity-name="OrderHeader">
+                <econdition field-name="orderId" value="${context.orderId}"/>
+            </entity-delete-by-condition>
+            <if condition="orderId">
+                <then>
+                    <set field="status" value="true"/>
+                </then>
+                <else>
+                    <set field="status" value="true"/>
+                </else>
+            </if>
+        </actions>
+    </service>
+</services>
