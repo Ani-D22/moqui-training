@@ -33,7 +33,7 @@
 
         <out-parameters>
             <parameter name="header"/>
-            <parameter name="listOfItems" type="List"/>
+            <parameter name="itemList" type="List"/>
         </out-parameters>
 
         <actions>
@@ -43,7 +43,6 @@
             </entity-find>
         </actions>
     </service>
-
 
     <service verb="delete" noun="OrderHeader">
         <in-parameters>

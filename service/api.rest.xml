@@ -42,7 +42,7 @@
         <method type="post"><service name="OrderHeaderService.create#OrderHeader"/></method>
         <id name="orderId">
             <method type="get"><service name="OrderHeaderService.find#OrderHeader"/></method>
-            <method type="delete"><entity name="OrderHeaderService.delete#OrderHeader" operation="delete"/></method>
+            <method type="delete"><service name="OrderHeaderService.delete#OrderHeader"/></method>
             <method type="put"><entity name="OrderHeader" operation="update"/></method>
 
             <resource name="items">
