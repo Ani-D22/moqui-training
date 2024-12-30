@@ -5,7 +5,7 @@
     <service verb="create" noun="OrderHeader">
         <in-parameters>
             <auto-parameters entity-name="OrderHeader" include="nonpk" required="true"/>
-            <parameter name="itemList" type="List" required="true">
+            <parameter name="listOfItems" type="List" required="true">
                 <parameter name="orderItem" type="Map" required="true">
                     <parameter name="productId" required="true"/>
                     <parameter name="quantity" required="true"/>
@@ -18,7 +18,7 @@
         </out-parameters>
         <actions>
             <service-call name="create#OrderHeader" in-map="context" out-map="context"/>
-            <iterate list="itemList" entry="orderItem">
+            <iterate list="listOfItems" entry="orderItem">
                 <set field="orderItem.orderId" from="orderItem.orderId"/>
                 <service-call name="OrderItemService.create#OrderItem" in-map="orderItem"/>
             </iterate>
@@ -33,7 +33,7 @@
 
         <out-parameters>
             <parameter name="header"/>
-            <parameter name="itemList" type="List"/>
+            <parameter name="listOfItems" type="List"/>
         </out-parameters>
 
         <actions>
