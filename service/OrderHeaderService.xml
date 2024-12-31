@@ -19,7 +19,7 @@
         <actions>
             <service-call name="create#OrderHeader" in-map="context" out-map="context"/>
             <iterate list="itemList" entry="orderItem">
-                <set field="orderItem.orderId" from="orderItem.orderId"/>
+                <set field="orderItem.orderId" from="context.orderId"/>
                 <service-call name="OrderItemService.create#OrderItem" in-map="orderItem"/>
             </iterate>
         </actions>

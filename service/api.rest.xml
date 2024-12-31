@@ -10,7 +10,8 @@
 
         <id name="partyId">
             <method type="get"><entity name="Party" operation="one"/></method>
-            <method type="delete"><entity name="Party" operation="delete"/></method>
+            <method type="delete"><entity name="Party" operation="delete"/>
+            </method>
             <method type="put"><service name="PartyService.store#Party"/></method>
 
             <!-- Parent Resource for Contact Mech -->

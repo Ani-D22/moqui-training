@@ -13,9 +13,9 @@
 
     <service verb="store" noun="Party">
         <in-parameters>
-            <auto-parameters entity-name="Party" include="all"/>
+            <auto-parameters entity-name="Party"/>
             <parameter name="partyId" required="true"/>
-            <auto-parameters entity-name="Party" include="nonpk"/>
+            <auto-parameters entity-name="Party"/>
         </in-parameters>
 
         <out-parameters>
@@ -29,21 +29,12 @@
 
             <if condition="existingRecord">
                 <then>
-                    <set field="existingRecord.partyType" from="partyType"/>
-                    <set field="existingRecord.firstName" from="firstName"/>
-                    <set field="existingRecord.lastName" from="lastName"/>
-                    <!-- Updates my existing record -->
-                    <entity-update value-field="existingRecord"/>
-
-                    <set field="partyId" from="existingRecord.partyId"/>
-
-                    <set field="success" from="true"/>
-                    <set field="message" from="Record updated."/>
+                    <service-call name="update#Party" in-map="context" out-map="context"/>
+                    <set field="message" value="Record updated."/>
                 </then>
                 <else>
                     <service-call name="create#Party" in-map="context" out-map="context"/>
-                    <set field="success" from="false"/>
-                    <set field="message" from="New record inserted."/>
+                    <set field="message" value="New record inserted."/>
                 </else>
             </if>
         </actions>
